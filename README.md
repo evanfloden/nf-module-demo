@@ -1,4 +1,4 @@
-#Nextflow Modules and Components Proposal
+# Nextflow Modules and Components Proposal
  
 The reuse and recombination of common tasks has been seen by some as a 
 major obstacle to the uptake of Nextflow.
@@ -47,9 +47,4 @@ To be eligible as a component in a module it should should :
 Using only current NF syntax, we can illustrate how this can work in the demo contained within 
 this repository.
 
- 
- 
- 
- 
- 
 
