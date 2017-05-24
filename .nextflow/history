@@ -1,0 +1,8 @@
+2017-05-24 12:25:07	2.1s	jolly_wiles	ERR	f42fd0d120e0e88dd3ce9c773c31c47c	b0c462c2-0f54-4c86-9f02-a35a0dd67e7b	nextflow run main.nf
+2017-05-24 12:43:52	3.6s	kickass_borg	ERR	f42fd0d120e0e88dd3ce9c773c31c47c	5c86e44b-327c-4b07-b922-2862d32abc61	nextflow run main.nf
+2017-05-24 12:50:36	1.3s	jolly_swanson	ERR	f42fd0d120e0e88dd3ce9c773c31c47c	6e342b19-0d64-4141-a9f6-920c4b547725	nextflow run main.nf
+2017-05-24 12:51:31	2s	evil_bassi	ERR	f42fd0d120e0e88dd3ce9c773c31c47c	bf1ce1c6-317b-4328-85e2-4890fb7674be	nextflow run main.nf
+2017-05-24 12:53:12	1.5s	cocky_hugle	ERR	f42fd0d120e0e88dd3ce9c773c31c47c	c7f6c644-4b4a-40c8-a5ad-77a03a96e633	nextflow run main.nf
+2017-05-24 13:01:27	1.4s	trusting_allen	ERR	f42fd0d120e0e88dd3ce9c773c31c47c	74647a2b-1c2c-4d1d-a963-47b3ba7995da	nextflow run main.nf
+2017-05-24 13:03:29	1.5s	sleepy_lovelace	ERR	f42fd0d120e0e88dd3ce9c773c31c47c	7de24023-8d10-4785-976b-0e28c9dc4f99	nextflow run main.nf
+2017-05-24 13:37:58	1.3s	focused_bohr	ERR	f42fd0d120e0e88dd3ce9c773c31c47c	132150b4-dd4d-43db-ac6a-7a462d39ebf0	nextflow run main.nf

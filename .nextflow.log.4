@@ -1,0 +1,83 @@
+May-24 12:51:31.273 [main] DEBUG nextflow.cli.Launcher - $> /home/efloden/bin/nextflow run main.nf
+May-24 12:51:31.402 [main] INFO  nextflow.cli.CmdRun - N E X T F L O W  ~  version 0.24.4
+May-24 12:51:31.415 [main] INFO  nextflow.cli.CmdRun - Launching `main.nf` [evil_bassi] - revision: f42fd0d120
+May-24 12:51:31.434 [main] DEBUG nextflow.config.ConfigBuilder - Found config local: nextflow.config
+May-24 12:51:31.436 [main] DEBUG nextflow.config.ConfigBuilder - Parsing config file: /home/efloden/projects/nf-module-demo/nextflow.config
+May-24 12:51:31.803 [main] DEBUG nextflow.config.ConfigBuilder - Setting config profile: 'standard'
+May-24 12:51:31.867 [main] DEBUG nextflow.Session - Session uuid: bf1ce1c6-317b-4328-85e2-4890fb7674be
+May-24 12:51:31.868 [main] DEBUG nextflow.Session - Run name: evil_bassi
+May-24 12:51:31.870 [main] DEBUG nextflow.Session - Executor pool size: 24
+May-24 12:51:31.883 [main] DEBUG nextflow.cli.CmdRun - 
+  Version: 0.24.4 build 4341
+  Modified: 22-05-2017 11:18 UTC (13:18 CEST)
+  System: Linux 4.4.0-78-generic
+  Runtime: Groovy 2.4.10 on Java HotSpot(TM) 64-Bit Server VM 1.8.0_121-b13
+  Encoding: UTF-8 (UTF-8)
+  Process: 4594@fiji.crg.es [127.0.1.1]
+  CPUs: 24 - Mem: 47.2 GB (42.8 GB) - Swap: 54.5 GB (54.5 GB)
+May-24 12:51:31.907 [main] DEBUG nextflow.Session - Work-dir: /home/efloden/projects/nf-module-demo/work [ext2/ext3]
+May-24 12:51:31.907 [main] DEBUG nextflow.Session - Script base path does not exist or is not a directory: /home/efloden/projects/nf-module-demo/bin
+May-24 12:51:32.044 [main] DEBUG nextflow.Session - Session start invoked
+May-24 12:51:32.048 [main] DEBUG nextflow.processor.TaskDispatcher - Dispatcher > start
+May-24 12:51:32.048 [main] DEBUG nextflow.script.ScriptRunner - > Script parsing
+May-24 12:51:32.224 [main] DEBUG nextflow.script.ScriptRunner - > Launching execution
+May-24 12:51:32.245 [main] DEBUG nextflow.Channel - files for syntax: glob; folder: data/reads/; pattern: *.fastq; options: [:]
+May-24 12:51:32.520 [main] DEBUG nextflow.processor.ProcessFactory - << taskConfig executor: null
+May-24 12:51:32.520 [main] DEBUG nextflow.processor.ProcessFactory - >> processorType: 'local'
+May-24 12:51:32.528 [main] DEBUG nextflow.executor.Executor - Initializing executor: local
+May-24 12:51:32.531 [main] INFO  nextflow.executor.Executor - [warm up] executor > local
+May-24 12:51:32.538 [main] DEBUG n.processor.LocalPollingMonitor - Creating local task monitor for executor 'local' > cpus=24; memory=47.2 GB; capacity=24; pollInterval=100ms; dumpInterval=5m
+May-24 12:51:32.542 [main] DEBUG nextflow.processor.TaskDispatcher - Starting monitor: LocalPollingMonitor
+May-24 12:51:32.543 [main] DEBUG n.processor.TaskPollingMonitor - >>> barrier register (monitor: local)
+May-24 12:51:32.545 [main] DEBUG nextflow.executor.Executor - Invoke register for executor: local
+May-24 12:51:32.583 [main] DEBUG nextflow.Session - >>> barrier register (process: index)
+May-24 12:51:32.601 [main] DEBUG nextflow.processor.TaskProcessor - Creating operator > index -- maxForks: 24
+May-24 12:51:32.628 [Actor Thread 1] DEBUG nextflow.processor.TaskProcessor - <index> Poison pill arrived
+May-24 12:51:32.630 [Actor Thread 3] DEBUG nextflow.processor.StateObj - <index> State before poison: StateObj[submitted: 1; completed: 0; poisoned: false ]
+May-24 12:51:32.632 [main] DEBUG nextflow.processor.ProcessFactory - << taskConfig executor: null
+May-24 12:51:32.633 [main] DEBUG nextflow.processor.ProcessFactory - >> processorType: 'local'
+May-24 12:51:32.633 [main] DEBUG nextflow.executor.Executor - Initializing executor: local
+May-24 12:51:32.634 [main] DEBUG nextflow.Session - >>> barrier register (process: mapping)
+May-24 12:51:32.646 [main] DEBUG nextflow.processor.TaskProcessor - Creating operator > mapping -- maxForks: 24
+May-24 12:51:32.649 [main] DEBUG nextflow.script.ScriptRunner - > Await termination 
+May-24 12:51:32.649 [main] DEBUG nextflow.Session - Session await
+May-24 12:51:32.786 [Actor Thread 2] INFO  nextflow.Session - [be/286fd5] Submitted process > index (1)
+May-24 12:51:32.787 [Actor Thread 1] DEBUG nextflow.processor.TaskProcessor - <index> After stop
+May-24 12:51:32.863 [Thread-2] ERROR nextflow.processor.TaskProcessor - Error executing process > 'index (1)'
+
+Caused by:
+  Process `index (1)` terminated with an error exit status (126)
+
+Command executed [/home/efloden/projects/nf-module-demo/modules/readMapping/components/index_kallisto.sh]:
+
+  mkdir kallisto_index
+  kallisto index -i transcriptome.index transcriptome.fa
+  mv transcriptome.index kallisto_index/.
+
+Command exit status:
+  126
+
+Command output:
+  (empty)
+
+Command error:
+  docker: Got permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Post http://%2Fvar%2Frun%2Fdocker.sock/v1.27/containers/create?name=nxf-u0xzJwBnNZbzbN5aY0hLCyfZ: dial unix /var/run/docker.sock: connect: permission denied.
+  See 'docker run --help'.
+
+Work dir:
+  /home/efloden/projects/nf-module-demo/work/be/286fd522619b10a4ef0df237b1fe02
+
+Tip: view the complete command output by changing to the process work dir and entering the command `cat .command.out`
+May-24 12:51:32.868 [Actor Thread 3] DEBUG nextflow.processor.TaskProcessor - <index> Sending poison pills and terminating process
+May-24 12:51:32.868 [Thread-2] DEBUG nextflow.Session - Session aborted -- Cause: Process `index (1)` terminated with an error exit status (126)
+May-24 12:51:32.870 [Actor Thread 1] DEBUG nextflow.processor.TaskProcessor - <mapping> Poison pill arrived
+May-24 12:51:32.870 [Actor Thread 3] DEBUG nextflow.Session - <<< barrier arrive (process: index)
+May-24 12:51:32.871 [Actor Thread 6] DEBUG nextflow.processor.StateObj - <mapping> State before poison: StateObj[submitted: 0; completed: 0; poisoned: false ]
+May-24 12:51:32.872 [Actor Thread 6] DEBUG nextflow.processor.TaskProcessor - <mapping> Sending poison pills and terminating process
+May-24 12:51:32.872 [Actor Thread 6] DEBUG nextflow.Session - <<< barrier arrive (process: mapping)
+May-24 12:51:32.874 [Actor Thread 1] DEBUG nextflow.processor.TaskProcessor - <mapping> After stop
+May-24 12:51:32.874 [main] DEBUG nextflow.Session - Session await > all process finished
+May-24 12:51:32.874 [Thread-2] DEBUG n.processor.TaskPollingMonitor - <<< barrier arrives (monitor: local)
+May-24 12:51:32.875 [main] DEBUG nextflow.Session - Session await > all barriers passed
+May-24 12:51:32.950 [main] DEBUG nextflow.CacheDB - Closing CacheDB done
+May-24 12:51:32.959 [main] DEBUG nextflow.script.ScriptRunner - > Execution complete -- Goodbye

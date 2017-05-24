@@ -11,7 +11,7 @@ Channel
     .set { read_files }
 
 // Define which component(s) from the readMapping module we want to use
-readMappingComponents = ['kallisto', 'salmon', 'sailfish']
+readMappingComponents = ['kallisto'] //, 'salmon', 'sailfish']
 
 // Define which container to use for each component. Could be preset in module config
 def readMappingContainers = [:]
@@ -34,10 +34,6 @@ process index {
     template "$baseDir/modules/readMapping/components/index_${mapper}.sh"
 }
 
-//indexes
-//    .filter{ foo, bar -> foo ==~ /kallisto/ }
-//    .view()
-
 process mapping {
     container = { readMappingContainers["${mapper}"] }
     
@@ -46,7 +42,7 @@ process mapping {
     set val(sampleID), file(reads) from read_files
     
     output:
-    set val("${mapper}"), file("${mapper}_sampleID") into reads
+    set val("${mapper}"), file("${mapper}_${sampleID}") into reads
       
     script:
     template "$baseDir/modules/readMapping/components/mapping_${mapper}.sh"
