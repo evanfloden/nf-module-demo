@@ -11,7 +11,7 @@ Channel
     .set { read_files }
 
 // Define which component(s) from the readMapping module we want to use
-readMappingComponents = ['kallisto', 'salmon', 'sailfish']
+readMappingComponents = ['sailfish', 'kallisto', 'salmon']
 
 
 // Define which container to use for each component. Could be preset in module config
@@ -38,16 +38,43 @@ process index {
 indexes
     .combine(read_files)
     .set { read_files_and_index }
- 
-process mapping {
+
+process quantification {
     container = { readMappingContainers["${mapper}"] }
     
     input:
-    set val(mapper), file('index'), val(sampleID), file(reads) from read_files_and_index
+    set val(mapper), file('index'), val(sampleID), file(reads) from read_files_and_index 
     
     output:
-    set val("${mapper}"), file("${mapper}_${sampleID}") into reads
-     
+    set val("${mapper}"), val("${sampleID}"), file("${mapper}_${sampleID}") into quant
+      
     script:
     template "$baseDir/modules/readMapping/components/mapping_${mapper}.sh"
 }
+
+process results {
+    container = { readMappingContainers["${mapper}"] }
+
+    input:
+    set val(mapper), val(sampleID), file(quant_dir) from quant
+
+    output:
+    set val("${mapper}"), val("${sampleID}"), file("${mapper}_${sampleID}.quant") into results
+
+    script:
+    template "$baseDir/modules/readMapping/components/results_${mapper}.sh"
+}
+
+//process figure {
+//    container = { readMappingContainers["${mapper}"] }
+//
+//    input:
+//    set val(mapper), val(sampleID), file(quant_dir) from quant
+//
+//    output:
+//    set val(${mapper}), val(${sampleID}), file("${mapper}_${sampleID}.quant") into results
+//
+//    script:
+//    template "$baseDir/modules/readMapping/components/results_${mapper}.sh"
+//}
+ 
