@@ -1,6 +1,6 @@
 # readMapping Module
 
-#### Module for quanitfying transcripts from short sequecencing reads
+#### Nexflow module for quantifying transcripts from short sequecencing reads
 
 
 ***This module takes as input:***
@@ -24,9 +24,9 @@
 
 All compoments in this module perform the following operations:
 
-|Name           |Process Name   |EDAM Label |EDAM IRI|EDAM Link|
-|---            |---            |---           |---      |
-|FASTA indexing |`index`|Genome indexing|operation_3211 |[Link](http://edamontology.org/operation_3211)|
+|Name           |Process Name   |EDAM Label |EDAM IRI |EDAM Link|
+|---            |---            |---        |---      |---       |
+|FASTA indexing |`index`        |Genome indexing |operation_3211 |[Link](http://edamontology.org/operation_3211)|
 |Mapping/quantification |`quantification`|RNA-Seq quantification|operation_3800 |[Link](http://edamontology.org/operation_3800)|
 |Collect results  |`results`|  Aggregation | operation_3436 | [Link](http://edamontology.org/operation_3436) |
 
@@ -54,14 +54,14 @@ To use the resulting output channel in downstream operations or processes
 This component generates the following [EDAM](http://edamontology.org/page) data formats as output.
 
 |Common Name |Common Extensions   |EDAM Name | EDAM IRI | EDAM Description| 
-|---         |---|---|---|---|---|
+|---         |---|---|---|---|
 |Quantified transcripts |`.csv`/`.tsv`| `DSV: Delimiter-separated values` | `format_3751` | [Link](http://edamontology.org/format_3751) |
 
 
 
 ### Module Usage
 
-From within a Nextflow pipeline, you can specify the following.
+From within a Nextflow pipeline, you can specify the following:
 
 ```
 module readMapper(id, readsChannel, transcriptomeChannel, moduleConfig, outputChannel)
@@ -71,7 +71,7 @@ module readMapper(id, readsChannel, transcriptomeChannel, moduleConfig, outputCh
 
 See each component page for the default command line parameters and arguments.
 
-To change command line options you can provide a configuration, for example:
+To change the default command line options you can provide a configuration, for example:
 
     readMapping config { 
         kallisto {
