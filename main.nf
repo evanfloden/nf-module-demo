@@ -11,19 +11,19 @@ Channel
     .set { read_files }
 
 // Define which component(s) from the readMapping module we want to use
-readMappingComponents = ['sailfish', 'kallisto', 'salmon']
+readMappingComponents = ['kallisto'] //''sailfish', 'kallisto', 'salmon']
 
 
 // Define which container to use for each component. Could be preset in module config
 def readMappingContainers = [:]
-    readMappingContainers["kallisto"]  =  "quay.io/biocontainers/kallisto:0.43.0--hdf51.8.17_2"
+    //readMappingContainers["kallisto"]  =  "quay.io/biocontainers/kallisto:0.43.0--hdf51.8.17_2"
     readMappingContainers["salmon"]    =  "quay.io/biocontainers/salmon:0.8.2--1"
     readMappingContainers["sailfish"]  =  "quay.io/biocontainers/sailfish:0.10.1--1"
 
 
 process index {
-    container = { readMappingContainers["${mapper}"] }
-    
+    container = params.modules.readMapping.kallisto.execution
+   
     input:
     val(mapper) from readMappingComponents
     file transcriptome_file
@@ -32,7 +32,7 @@ process index {
     set val("${mapper}"), file("${mapper}_index") into indexes
       
     script:
-    template "$baseDir/modules/readMapping/components/index_${mapper}.sh"
+    template "$baseDir/modules/readMapping/components/${mapper}/index_${mapper}.sh"
 }
 
 indexes
@@ -49,7 +49,7 @@ process quantification {
     set val("${mapper}"), val("${sampleID}"), file("${mapper}_${sampleID}") into quant
       
     script:
-    template "$baseDir/modules/readMapping/components/mapping_${mapper}.sh"
+    template "$baseDir/modules/readMapping/components/${mapper}/mapping_${mapper}.sh"
 }
 
 process results {
@@ -62,7 +62,7 @@ process results {
     set val("${mapper}"), val("${sampleID}"), file("${mapper}_${sampleID}.quant") into results
 
     script:
-    template "$baseDir/modules/readMapping/components/results_${mapper}.sh"
+    template "$baseDir/modules/readMapping/components/${mapper}/results_${mapper}.sh"
 }
 
 //process figure {
