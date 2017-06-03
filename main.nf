@@ -13,56 +13,70 @@ Channel
 // Define which component(s) from the readMapping module we want to use
 readMappingComponents = ['kallisto'] //''sailfish', 'kallisto', 'salmon']
 
-
-// Define which container to use for each component. Could be preset in module config
-def readMappingContainers = [:]
-    //readMappingContainers["kallisto"]  =  "quay.io/biocontainers/kallisto:0.43.0--hdf51.8.17_2"
-    readMappingContainers["salmon"]    =  "quay.io/biocontainers/salmon:0.8.2--1"
-    readMappingContainers["sailfish"]  =  "quay.io/biocontainers/sailfish:0.10.1--1"
-
+// Define a function for parsing component commandline options
+def cmdLineArgParse(argObj) {
+  def cmdLineArg = ''
+  argObj.each {
+    if (it.value[0] == true) {
+      cmdLineArg = cmdLineArg + " "+ it.value[1]
+    }
+    else if (it.value[0] != false) {
+        cmdLineArg = cmdLineArg + " "+ it.value[1] + "=" + it.value[0]
+    }
+  }
+  return cmdLineArg
+}
 
 process index {
-    container = params.modules.readMapping.kallisto.execution
+    container = { params.modules.readMapping."${component}".container }
+    tag { "Indexing ${transcriptome_file.getName()} with ${component}" }
    
     input:
-    val(mapper) from readMappingComponents
+    val(component) from readMappingComponents
     file transcriptome_file
     
     output:
-    set val("${mapper}"), file("${mapper}_index") into indexes
+    set val("${component}"), file("${component}_index") into indexes
       
     script:
-    template "$baseDir/modules/readMapping/components/${mapper}/index_${mapper}.sh"
+    argObj = params.modules.readMapping."${component}".index.commandlineOptions
+    cmdLineOptions = cmdLineArgParse(argObj)
+    template "$baseDir/modules/readMapping/components/${component}/index_${component}.sh"
 }
 
 indexes
     .combine(read_files)
     .set { read_files_and_index }
 
+
+
 process quantification {
-    container = { readMappingContainers["${mapper}"] }
-    
+    container = { params.modules.readMapping."${component}".container }   
+    tag { "Quantifying ${sampleID} with ${component}" }
+ 
     input:
-    set val(mapper), file('index'), val(sampleID), file(reads) from read_files_and_index 
+    set val(component), file('index'), val(sampleID), file(reads) from read_files_and_index 
     
     output:
-    set val("${mapper}"), val("${sampleID}"), file("${mapper}_${sampleID}") into quant
+    set val("${component}"), val("${sampleID}"), file("${component}_${sampleID}") into quant
       
     script:
-    template "$baseDir/modules/readMapping/components/${mapper}/mapping_${mapper}.sh"
+    cmdLineOptions = cmdLineArgParse(params.modules.readMapping.kallisto.quantification.commandlineOptions)
+    template "$baseDir/modules/readMapping/components/${component}/quantification_${component}.sh"
 }
 
 process results {
-    container = { readMappingContainers["${mapper}"] }
+    container = { params.modules.readMapping."${component}".container }
+    tag { "Parsing sample ${sampleID} results from ${component}" }
 
     input:
-    set val(mapper), val(sampleID), file(quant_dir) from quant
+    set val(component), val(sampleID), file(quant_dir) from quant
 
     output:
-    set val("${mapper}"), val("${sampleID}"), file("${mapper}_${sampleID}.quant") into results
+    set val("${component}"), val("${sampleID}"), file("${component}_${sampleID}.quant") into results
 
     script:
-    template "$baseDir/modules/readMapping/components/${mapper}/results_${mapper}.sh"
+    template "$baseDir/modules/readMapping/components/${component}/results_${component}.sh"
 }
 
 //process figure {
