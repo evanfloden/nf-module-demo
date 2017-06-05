@@ -1,2 +1,2 @@
-mkdir ${mapper}_${sampleID}
-sailfish quant -i ${index} -l MSF -r ${reads} -o ${mapper}_${sampleID}
+mkdir ${component}_${sampleID}
+sailfish quant ${cmdLineOptions} -i ${index} -r ${reads} -o ${component}_${sampleID}
