@@ -11,7 +11,7 @@ Channel
     .set { read_files }
 
 // Define which component(s) from the readMapping module we want to use
-readMappingComponents = [ 'kallisto' ] //, 'salmon']
+readMappingComponents = [ 'kallisto', 'salmon', 'sailfish' ]
 
 // Define a function for parsing component commandline options
 def cmdLineArgParse(argObj) {
@@ -57,7 +57,7 @@ process quantification {
 
     output:
     set val("${component}"), val("${sampleID}"), file("${component}_${sampleID}") into quant
-    file("${sampleID}.log") into multiQC_ch
+    file("${component}_${sampleID}.log") into multiQC_ch
 
       
     script:
