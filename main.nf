@@ -27,6 +27,10 @@ def cmdLineArgParse(argObj) {
   return cmdLineArg
 }
 
+// Define multiqc config dir
+def multiqc = file(params.multiqc)
+
+
 process index {
     container = { params.modules.readMapping."${component}".container }
     tag { "Indexing ${transcriptome_file.getName()} with ${component}" }
@@ -86,6 +90,7 @@ process multiQC {
     container = "quay.io/biocontainers/multiqc:1.0--py35_4"
 
     input:
+    file (multiqcDir) from multiqc 
     file('*') from multiQC_ch.collect()
 
     output:
@@ -94,8 +99,9 @@ process multiQC {
 
     script:
     """
-    multiqc . --cl_config "extra_fn_clean_exts: ['_logs']" \
-              --cl_config "extra_fn_clean_trim: ['salmon_', 'sailfish_']"
+    cp ${multiqc}/* .
+
+    multiqc . 
     """
 }
 

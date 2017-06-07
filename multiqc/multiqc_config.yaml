@@ -1,0 +1,17 @@
+extra_fn_clean_exts:
+    - '_logs'
+extra_fn_clean_trim:
+    - 'salmon_'
+    - 'sailfish_'
+    - 'kallisto_'
+
+title: "Nextflow readMapping Module"
+subtitle: "A Nextflow module for quantification of genomic features from short read data"
+
+
+report_header_info:
+    - Contact E-mail: 'evanfloden@gmail.com'
+    - Application Type: 'RNA-seq'
+    - Project Type: 'Nextflow Modules'
+
+
