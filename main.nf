@@ -56,8 +56,8 @@ process quantification {
     set val(component), file('index'), val(sampleID), file(reads) from read_files_and_index 
 
     output:
-    set val("${component}"), val("${sampleID}"), file("${component}_${sampleID}") into quant
-    file("${component}_${sampleID}.log") into multiQC_ch
+    set val("${component}"), val("${sampleID}"), file("${sampleID}") into quant
+    file("${component}_${sampleID}_logs") into multiQC_ch
 
       
     script:
@@ -86,14 +86,16 @@ process multiQC {
     container = "quay.io/biocontainers/multiqc:1.0--py35_4"
 
     input:
-    file(multiQC_path) from multiQC_ch.collect()
+    file('*') from multiQC_ch.collect()
 
     output:
     file ("multiqc_report.html") into multiQCreport
+    file ("multiqc_data") into multiQCdata
 
     script:
     """
-    multiqc ${multiQC_path}
+    multiqc . --cl_config "extra_fn_clean_exts: ['_logs']" \
+              --cl_config "extra_fn_clean_trim: ['salmon_', 'sailfish_']"
     """
 }
 

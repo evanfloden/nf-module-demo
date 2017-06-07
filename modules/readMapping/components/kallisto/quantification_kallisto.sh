@@ -1,3 +1,4 @@
-mkdir ${component}_${sampleID}
-kallisto quant ${cmdLineOptions} -i ${index}/transcriptome.index -o kallisto_${sampleID} ${reads}
-cp .command.err kallisto_${sampleID}.log
+mkdir ${sampleID}
+mkdir kallisto_logs
+kallisto quant ${cmdLineOptions} -i ${index}/transcriptome.index -o ${sampleID} ${reads}
+cp .command.err kallisto_${sampleID}_logs
