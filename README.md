@@ -1,5 +1,5 @@
 # Nextflow Modules and Components Proposal
- 
+
 The reuse and recombination of common tasks has been seen by some as a 
 major obstacle to the uptake of Nextflow.
 
@@ -30,7 +30,34 @@ execution environments (containers).
  
 To illustrate this with an example, consider the module: 'mapping short reads' 
 that contains three mappers/components: kallisto, sailfish and salmon.
+
+## Quickstart
+
+*Requires Nextflow & Docker*
+
+    git clone https://github.com/skptic/nf-module-demo.git
+
+    cd nf-module-demo
+
+    nexflow run . -profile crg --email [your email]
+
+## Procedures
+
+1. Quality Control of Reads (FASTQC)
+2. Create Indicies (KALLISTO / SALMON / SAILFISH)
+3. Quantify Features (KALLISTO / SALMON / SAILFISH)
+4. Aggregate Results
+5. Generate Report (MULTIQC) 
+
+Only proceedure 2, 3 and 4 and part of the module, the others are part of the demonstration.
+
+See module description [here](modules/readMapping/readMapping.md)
+
+See an example component config [here](modules/readMapping/components/kallisto/kallisto.config)
+
  
+## Components
+
 To be eligible as a component in a module it should should :
 
 * take a **common** input data type (eg. short reads + an index)

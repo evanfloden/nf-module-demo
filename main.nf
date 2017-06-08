@@ -2,13 +2,16 @@
 params.transcriptome = "data/transcriptome.fa"
 params.reads         = "data/reads/*.fastq"
 
+// Define email to send results
+params.email = "evanfloden@gmail.com"
+
 // Create channels for input files
 transcriptome_file = file(params.transcriptome)
 
 Channel
     .fromFilePairs( params.reads, size: -1 )
     .ifEmpty { error "Cannot find any reads matching: ${params.reads}" }
-    .set { read_files }
+    .into { read_filesA; read_filesB }
 
 // Define which component(s) from the readMapping module we want to use
 readMappingComponents = [ 'kallisto', 'salmon', 'sailfish' ]
@@ -31,6 +34,24 @@ def cmdLineArgParse(argObj) {
 def multiqc = file(params.multiqc)
 
 
+process fastqc {
+    container = "genomicpariscentre/fastqc"
+    tag { "FASTQC on ${sampleID}" }
+
+    input:
+    set val(sampleID), file(reads) from read_filesB
+
+    output:
+    file("fastqc_${sampleID}_logs") into fastqc_multiQC_ch
+
+
+    script:
+    """
+    mkdir fastqc_${sampleID}_logs
+    fastqc -o fastqc_${sampleID}_logs -f fastq -q ${reads}
+    """  
+}
+
 process index {
     container = { params.modules.readMapping."${component}".container }
     tag { "Indexing ${transcriptome_file.getName()} with ${component}" }
@@ -49,7 +70,7 @@ process index {
 }
 
 indexes
-    .combine(read_files)
+    .combine(read_filesA)
     .set { read_files_and_index }
 
 process quantification {
@@ -61,7 +82,7 @@ process quantification {
 
     output:
     set val("${component}"), val("${sampleID}"), file("${sampleID}") into quant
-    file("${component}_${sampleID}_logs") into multiQC_ch
+    file("${component}_${sampleID}_logs") into quantification_multiQC_ch
 
       
     script:
@@ -85,13 +106,18 @@ process results {
 }
 
 
+quantification_multiQC_ch
+  .mix(fastqc_multiQC_ch)
+  .collect()
+  .set {multiQC_ch}
+
 process multiQC {
     publishDir = "$baseDir/results"
     container = "quay.io/biocontainers/multiqc:1.0--py35_4"
 
     input:
     file (multiqcDir) from multiqc 
-    file('*') from multiQC_ch.collect()
+    file('*') from multiQC_ch
 
     output:
     file ("multiqc_report.html") into multiQCreport
@@ -107,7 +133,7 @@ process multiQC {
 
 workflow.onComplete {
     def subject = 'NF Modules Demo'
-    def recipient = 'evanfloden@gmail.com'
+    def recipient = "${params.email}"
     def qc_report = "${baseDir}/results/multiqc_report.html"
 
     ['mail', '-a', qc_report, '-s', subject, recipient ].execute() << """
