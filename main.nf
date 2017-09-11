@@ -1,6 +1,6 @@
 // Define common input files
-params.transcriptome = "data/transcriptome.fa"
-params.reads         = "data/reads/*.fastq"
+params.transcriptome = "${baseDir}/data/transcriptome.fa"
+params.reads         = "${baseDir}/data/reads/*.fastq"
 
 // Define email to send results
 params.email = "evanfloden@gmail.com"
@@ -14,7 +14,8 @@ Channel
     .into { read_filesA; read_filesB }
 
 // Define which component(s) from the readMapping module we want to use
-readMappingComponents = [ 'kallisto', 'salmon', 'sailfish' ]
+params.readMappingComponents = "kallisto,salmon,sailfish"
+readMappingComponents        = params.readMappingComponents.tokenize(",") 
 
 // Define a function for parsing component commandline options
 def cmdLineArgParse(argObj) {
