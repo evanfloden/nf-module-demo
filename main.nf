@@ -1,3 +1,5 @@
+#!/usr/bin/env nextflow
+
 // Define common input files
 params.transcriptome = "${baseDir}/data/transcriptome.fa"
 params.reads         = "${baseDir}/data/reads/*.fastq"
